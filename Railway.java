@@ -12,7 +12,7 @@ public class Railway
          try {
                Class.forName("com.mysql.jdbc.Driver");
                Connection conn;
-             conn = DriverManager.getConnection("jdbc:mysql://localhost/railway","root","password");
+             conn = DriverManager.getConnection("jdbc:mysql://localhost/railway","root","password"); //Here give the user name and the password of your mysql essential 
                return conn;
              } 
          catch (ClassNotFoundException | SQLException e)
