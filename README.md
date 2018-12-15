@@ -1,4 +1,4 @@
-  This is a mini project of Railway reservation system which has been implemented using the swings and mysql essensial in this project i 
+    This is a mini project of Railway reservation system which has been implemented using the swings and mysql essensial in this project i 
 have spent many hours in spite of this project so i just needed a platform where i could share my work and now it has been possible due to 
 the git hub here the railway reservation was our mini project so i hope this project would be useful for you all
 
