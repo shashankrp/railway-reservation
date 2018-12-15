@@ -1,0 +1,1095 @@
+
+*********************welcome.java**************************
+
+package Railway;
+
+public class welcome extends javax.swing.JFrame {
+
+    /**
+     * Creates new form welcome
+     */
+    public welcome() {
+        initComponents();
+    }
+
+ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new login().setVisible(true);
+}
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new Details().setVisible(true);
+    }    
+public static void main(String args[]) {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new welcome().setVisible(true);
+            }
+        });
+    }
+******************************login*********************************
+package Railway;
+
+import com.mysql.jdbc.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+public class login extends javax.swing.JFrame {
+Connection connect = null;
+ResultSet rst=null,rs=null;
+PreparedStatement pst=null;
+    public login() {
+        initComponents();
+        connect = (Connection) Railway.connDB();
+    }
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        try{
+                 
+                 String sql="select * from registration where user='"+jTextField1.getText()+"' and password='"+jPasswordField1.getText()+"'";
+                 
+                 Statement s=connect.createStatement();
+                 rst=s.executeQuery(sql);
+            
+                 if(rst.next() == false)
+                 {
+                   String qry="select * from railway.admin where user='"+jTextField1.getText()+"' and password='"+jPasswordField1.getText()+"'";
+                      rs=s.executeQuery(qry);
+                 if(rs.next()==false)
+                 {
+                      JOptionPane.showMessageDialog(null," User or password error ");
+                 }else {
+                    
+                     this.setVisible(false);
+                     Admin_Auth home1=new Admin_Auth();
+                     home1.setVisible(true);
+                 }
+         jTextField1.setText("");
+         jPasswordField1.setText("");
+      
+      jTextField1.requestFocusInWindow();
+      jPasswordField1.requestFocusInWindow();
+}
+                 else 
+        {
+             JOptionPane.showMessageDialog(null," Login Succssfully... ");
+            this.setVisible(false);
+                     reservation home= new reservation();
+                     home.setVisible(true);
+        } 
+                
+        
+      }
+               
+catch(Exception e) 
+{
+    System.out.println(e.getMessage());
+}   
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+          this.setVisible(false);
+        new registration().setVisible(true);
+}
+private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+         this.setVisible(false);
+        new welcome().setVisible(true);
+    }   
+private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new RESET().setVisible(true);
+    }  
+public static void main(String args[]) {
+java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new login().setVisible(true);
+}
+        });
+    }
+
+******************************Details*******************************
+package Railway;
+import com.mysql.jdbc.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+public class Details extends javax.swing.JFrame {
+Connection connect = null;
+ResultSet rst=null;
+PreparedStatement pst=null;
+public Details() {
+        initComponents();
+        connect = (Connection) Railway.connDB();
+         try
+        {
+        String sql="select * from railway.Details";
+      
+        Statement s=connect.createStatement();
+        
+        rst=s.executeQuery(sql);
+        
+        if(rst.next() == false)
+        {
+                JOptionPane.showMessageDialog(null," No Such Records Invalid Pid");
+     
+         jTextField2.setText("");
+      
+      jTextField2.requestFocusInWindow();
+}
+        else
+        {
+            jTextField1.setText(rst.getString(1));
+            jTextField2.setText(rst.getString(2));
+            jTextField3.setText(rst.getString(3));
+            
+        }
+        
+      }
+      catch(Exception ee)
+      {
+          
+      }
+    }
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new welcome().setVisible(true);
+    }                                        
+public static void main(String args[]) {
+     java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Details().setVisible(true);
+            }
+        });
+    }
+********************************Admin************************************
+package Railway;
+
+import com.mysql.jdbc.Connection;
+import java.awt.HeadlessException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author User
+ */
+public class Admin_Auth extends javax.swing.JFrame {
+Connection connect = null;
+ResultSet rst=null;
+PreparedStatement pst=null;
+    public Admin_Auth() {
+        initComponents();
+        connect = (Connection) Railway.connDB();
+    }
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        try {
+
+    
+               Statement s=connect.createStatement();
+               String sql = "insert into trains values('"+jTextField1.getText()+"','"+jTextField2.getText()+"','"+jTextField3.getText()+"','"+jTextField4.getText()+"','"+jTextField5.getText()+"','"+jTextField6.getText()+"','"+jTextField7.getText()+"','"+jTextField8.getText()+"','"+jTextField9.getText()+"','"+jTextField10.getText()+"','"+jTextField11.getText()+"','"+jTextField12.getText()+"')"; 
+               s.executeUpdate(sql);
+
+                JOptionPane.showMessageDialog(null, "Success !");
+                jTextField1.setText(" ");
+                jTextField2.setText(" ");
+                jTextField3.setText(" ");
+                jTextField4.setText(" ");
+                jTextField5.setText(" ");
+                jTextField6.setText(" ");
+                jTextField7.setText(" ");
+                jTextField8.setText(" ");
+                jTextField9.setText(" ");
+                jTextField10.setText(" ");
+                jTextField11.setText(" ");
+                jTextField12.setText(" ");
+                  } 
+              catch (HeadlessException | SQLException e) {
+                      System.out.println("errorrr");
+              }      
+    }                                        
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new login().setVisible(true);
+    }                                        
+private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new remove().setVisible(true);
+    }                                        
+private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new seat_u().setVisible(true);
+    }
+private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+            try
+        {
+        String sql="select * from railway.booking";
+      
+        Statement s=connect.createStatement();
+        
+        rst=s.executeQuery(sql);
+        
+        jTable1.setModel(DbUtils.resultSetToTableModel(rst));
+        
+        if(rst.next() == false)
+        {
+                JOptionPane.showMessageDialog(null," Success");
+     
+         jTextField1.setText(" ");
+         
+      
+      jTextField1.requestFocusInWindow();
+}else{
+        JOptionPane.showMessageDialog(null," No such value is found");
+        }
+        }
+      catch(Exception ee)
+      {
+    }                                   
+
+    }                                        
+public static void main(String args[]) {
+    java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Admin_Auth().setVisible(true);
+            }
+        });
+    }
+*********************************RESET*********************************
+package Railway;
+
+import com.mysql.jdbc.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
+public class RESET extends javax.swing.JFrame {
+Connection connect = null;
+ResultSet rst=null;
+PreparedStatement pst=null;
+    /**
+     * Creates new form RESET
+     */
+    public RESET() {
+        initComponents();
+        connect = (Connection) Railway.connDB();
+    }
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+         try
+      {
+       
+          String sql="update registration set Password='"+jPasswordField1.getText()+"' where user='"+jTextField1.getText()+"'";
+      
+        Statement s=connect.createStatement();
+        
+       s.executeUpdate(sql);
+        
+                JOptionPane.showMessageDialog(null," user Records UPdated Succssfully... ");
+        
+      jTextField1.setText("");
+      jPasswordField1.setText("");
+      
+      jPasswordField1.requestFocusInWindow();
+      
+                
+      }
+        
+      
+      catch(Exception ee)
+      {
+                JOptionPane.showMessageDialog(null," Erro="+ee);
+          
+      }
+    }                                        
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+         this.setVisible(false);
+        new login().setVisible(true);
+    }                                        
+public static void main(String args[]) {
+    java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new RESET().setVisible(true);
+            }
+        });
+    }
+***********************************Railway*********************************
+package Railway;
+import java.awt.Container;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+public class Railway 
+{
+     Connection conn;
+    public static Connection connDB()
+        {
+         try {
+               Class.forName("com.mysql.jdbc.Driver");
+               Connection conn;
+             conn = DriverManager.getConnection("jdbc:mysql://localhost/railway","root","password");
+               return conn;
+             } 
+         catch (ClassNotFoundException | SQLException e)
+            {
+               JOptionPane.showMessageDialog(null, e);
+            }
+         return null;
+        }
+
+    public Railway() {
+        this.conn = null;
+    }
+
+public static void main(String args[]) {
+java.awt.EventQueue.invokeLater(() -> {
+            new Railway().setVisible(true);
+        });
+    }
+private void setVisible(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+private void setDefaultCloseOperation(int EXIT_ON_CLOSE) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+private Container getContentPane() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+private void pack() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+}
+***********************************Search Train*****************************
+package Railway;
+
+import com.mysql.jdbc.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+public class SearchTrain extends javax.swing.JFrame {
+Connection connect = null;
+ResultSet rst=null;
+PreparedStatement pst=null;
+    public SearchTrain() {
+        initComponents();
+        connect = (Connection) Railway.connDB();
+    }
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        try
+        {
+        String sql="select * from railway.trains where To_A='"+jTextField2.getText()+"' and Date='"+jTextField12.getText()+"'";
+      
+        Statement s=connect.createStatement();
+        
+        rst=s.executeQuery(sql);
+        
+        if(rst.next() == false)
+        {
+                JOptionPane.showMessageDialog(null," No Such Records Invalid Pid");
+     
+         jTextField2.setText("");
+         jTextField12.setText("");
+         
+      
+      jTextField2.requestFocusInWindow();
+      jTextField12.requestFocusInWindow();
+}
+        else
+        {
+            jTextField1.setText(rst.getString(3));
+            jTextField3.setText(rst.getString(1));
+            jTextField4.setText(rst.getString(2));
+            jTextField5.setText(rst.getString(5));
+            jTextField6.setText(rst.getString(6));
+            jTextField7.setText(rst.getString(7));
+            jTextField8.setText(rst.getString(8));
+            jTextField9.setText(rst.getString(9));
+            jTextField10.setText(rst.getString(10));
+            jTextField11.setText(rst.getString(11));
+             }
+        
+      }
+      catch(Exception ee)
+      {
+          
+      }
+                
+    }                                        
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new SearchTrain().setVisible(true);
+    }                                        
+private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new reservation().setVisible(true);
+    }                                        
+private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new Train().setVisible(true);
+    }                                        
+public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new SearchTrain().setVisible(true);
+            }
+        });
+    }
+******************************Ticket Cancel**********************************
+package Railway;
+
+import com.mysql.jdbc.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author User
+ */
+public class Ticket_c extends javax.swing.JFrame {
+Connection connect = null;
+ResultSet rst=null;
+PreparedStatement pst=null;
+    /**
+     * Creates new form Ticket_c
+     */
+    public Ticket_c() {
+        initComponents();
+        connect = (Connection) Railway.connDB();
+    }
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        try
+      {
+          String sql="delete from booking where user='"+jTextField1.getText()+"'";
+      
+        Statement s=connect.createStatement();
+        
+       s.executeUpdate(sql);
+        
+                JOptionPane.showMessageDialog(null," Ticket Cancelled Succssfully... ");
+       jTextField1.setText("");
+      
+      
+      jTextField1.requestFocusInWindow();
+
+      }
+        
+      
+      catch(Exception ee)
+      {
+          
+      }
+    }                                        
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+         this.setVisible(false);
+        new reservation().setVisible(true);
+    }                                        
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Ticket_c.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Ticket_c.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Ticket_c.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Ticket_c.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Ticket_c().setVisible(true);
+            }
+        });
+    }
+**********************Trains******************************
+package Railway;
+
+import com.mysql.jdbc.Connection;
+import java.awt.HeadlessException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
+
+public class Train extends javax.swing.JFrame {
+Connection connect = null;
+    ResultSet rst=null;
+    PreparedStatement pst=null;
+    /**
+     * Creates new form Train
+     */
+    public Train() {
+        initComponents();
+        connect = (Connection) Railway.connDB();
+    }
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        try {
+
+                
+               Statement s=connect.createStatement();
+               
+               CallableStatement statement=connect.prepareCall("{call abc(?,?,?,?,?)}");
+               statement.setString(1,jTextField1.getText());
+               statement.setString(2,jTextField2.getText());
+               statement.setString(3,jTextField3.getText());
+               statement.setString(4,jComboBox1.getSelectedItem().toString());
+               statement.setString(5,jTextField4.getText());
+               statement.execute();
+               statement.close();
+               JOptionPane.showMessageDialog(null,"Success");
+               jTextField1.setText("");
+               jTextField2.setText(" ");
+               jTextField4.setText(" ");
+           
+                if(jComboBox1.getSelectedItem().toString() == "GEN")
+                {
+                    int i=21;
+                    while(i>=0)
+                    {
+              
+                 
+                JOptionPane.showMessageDialog(null, "Success the Ticket booked!");
+                i--;
+                String qry = "update railway.trains Set gen="+i+" where To_A='"+jTextField3.getText()+"'";
+                s.executeUpdate(qry);
+                jTextField1.setText(" ");
+                jTextField2.setText(" ");
+                jTextField3.setText(" ");
+                break;
+                }
+                }else if(jComboBox1.getSelectedItem().toString() == "AC1")
+                    {
+                     int i=10;
+                     while(i>=0)
+                    { 
+                    
+                 
+                JOptionPane.showMessageDialog(null, "Success !");
+                i--;
+                String qry = "update railway.trains Set AC1="+i+" where To_A='"+jTextField3.getText()+"'";
+                s.executeUpdate(qry);
+                jTextField1.setText(" ");
+                jTextField2.setText(" ");
+                jTextField3.setText(" ");
+                    break;
+                    }
+                    }else if(jComboBox1.getSelectedItem().toString() == "AC2")
+                            {
+                               int i=10;
+                               while(i>=0)
+                    { 
+                    
+              
+                 
+                JOptionPane.showMessageDialog(null, "Success !");
+                i--;
+                String qry = "update railway.trains Set AC2="+i+" where To_A='"+jTextField3.getText()+"'";
+                s.executeUpdate(qry);
+                jTextField1.setText(" ");
+                jTextField2.setText(" ");
+                jTextField3.setText(" ");
+                this.setVisible(false);
+                new Train().setVisible(true);
+                    break;
+                    }
+                   
+                            }else if(jComboBox1.getSelectedItem().toString() == "FC")
+                            {
+                                int i=10;
+                               while(i>=0)
+                    { 
+                    
+              
+                 
+                JOptionPane.showMessageDialog(null, "Success !");
+                i--;
+                String qry = "update railway.trains Set FC="+i+" where To_A='"+jTextField3.getText()+"'";
+                s.executeUpdate(qry);
+                jTextField1.setText(" ");
+                jTextField2.setText(" ");
+                jTextField3.setText(" ");
+                this.setVisible(false);
+        new Train().setVisible(true);
+                    break;
+                    }
+                            }else if(jComboBox1.getSelectedItem().toString() == "SLP")
+                            {
+                                int i=10;
+                               while(i>=0)
+                    { 
+                    
+              
+                 
+                JOptionPane.showMessageDialog(null, "Success !");
+                i--;
+                String qry = "update railway.trains Set slp="+i+" where To_A='"+jTextField3.getText()+"'";
+                s.executeUpdate(qry);
+                jTextField1.setText(" ");
+                jTextField2.setText(" ");
+                jTextField3.setText(" ");
+                this.setVisible(false);
+        new Train().setVisible(true);
+                    break;
+                    }
+                            }else{
+                                
+                            }
+        }
+                
+              catch (HeadlessException | SQLException e) {
+                      System.out.println("errorrr");
+              }      
+
+                
+    }                                        
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new SearchTrain().setVisible(true);
+    }                                        
+public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Train().setVisible(true);
+            }
+        });
+    }
+****************************booking**************************
+package Railway;
+
+import Railway.Railway;
+import com.mysql.jdbc.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.*;
+import net.proteanit.sql.DbUtils;
+public class booking extends javax.swing.JFrame {
+Connection connect = null;
+ResultSet rst=null;
+PreparedStatement pst=null;
+    /**
+     * Creates new form booking
+     */
+    DefaultTableModel model;
+    public booking() {
+        initComponents();
+        connect = (Connection) Railway.connDB();
+        model=(DefaultTableModel)tble.getModel();
+    }
+private void subActionPerformed(java.awt.event.ActionEvent evt) {                                    
+        try
+        {
+        String sql="select * from railway.booking where user='"+user.getText()+"' and Date='"+Date.getText()+"'";
+      
+        Statement s=connect.createStatement();
+        
+        rst=s.executeQuery(sql);
+        
+        tble.setModel(DbUtils.resultSetToTableModel(rst));
+
+        if(rst.next() == false)
+        {
+                JOptionPane.showMessageDialog(null," No Such Records Invalid Pid");
+     
+         user.setText(" ");
+         Date.setText("");
+         
+      
+      user.requestFocusInWindow();
+      Date.requestFocusInWindow();
+}else{
+        JOptionPane.showMessageDialog(null," Success");
+        }
+        }
+      catch(Exception ee)
+      {
+    }                                   
+
+}
+private void clrActionPerformed(java.awt.event.ActionEvent evt) {                                    
+         this.setVisible(false);
+        new booking().setVisible(true);
+    }                                   
+public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new booking().setVisible(true);
+            }
+        });
+    }
+******************************seat update***********************************
+package Railway;
+
+import com.mysql.jdbc.Connection;
+import java.awt.HeadlessException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+public class seat_u extends javax.swing.JFrame {
+Connection connect = null;
+ResultSet rst=null;
+PreparedStatement pst=null;
+    public seat_u() {
+        initComponents();
+        connect = (Connection) Railway.connDB();
+    }
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+         try
+      {
+          String sql="update railway.trains Set Date='"+jTextField2.getText()+"' where Train_no='"+jTextField1.getText()+"'";
+      
+        Statement s=connect.createStatement();
+        
+       s.executeUpdate(sql);
+        
+                JOptionPane.showMessageDialog(null," updation Succssfully... ");
+       jTextField1.setText("");
+       jTextField2.setText("");
+      
+      
+      jTextField1.requestFocusInWindow();
+      jTextField2.requestFocusInWindow();
+
+      }
+        
+      
+      catch(Exception ee)
+      {
+          
+      }
+    }                                        
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+         try
+      {    
+        int i=25;
+        String sql="update railway.trains Set gen='"+i+"' where Train_no='"+jTextField1.getText()+"'";
+      
+        Statement s=connect.createStatement();
+        
+        s.executeUpdate(sql);
+        
+                JOptionPane.showMessageDialog(null," updation Succssfully... ");
+       jTextField1.setText("");
+      
+      
+      jTextField1.requestFocusInWindow();
+      
+      }
+        
+      
+      catch(Exception ee)
+      {
+           
+      }   
+    }                                        
+private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+         try
+      {
+          int i=10;
+          String sql="update railway.trains Set AC1='"+i+"' where Train_no='"+jTextField1.getText()+"'";
+      
+        Statement s=connect.createStatement();
+        
+       s.executeUpdate(sql);
+        
+                JOptionPane.showMessageDialog(null," updation Succssfully... ");
+       jTextField1.setText("");
+       
+      
+      jTextField1.requestFocusInWindow();
+      
+      }
+        
+      
+      catch(Exception ee)
+      {
+          
+      }
+    }                                        
+private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+         try
+      {
+          int i=10;
+          String sql="update railway.trains Set AC2='"+i+"' where Train_no='"+jTextField1.getText()+"'";
+      
+        Statement s=connect.createStatement();
+        
+       s.executeUpdate(sql);
+        
+                JOptionPane.showMessageDialog(null," updation Succssfully... ");
+       jTextField1.setText("");
+       
+      
+      jTextField1.requestFocusInWindow();
+      
+      }
+        
+      
+      catch(Exception ee)
+      {
+          
+      }
+    }                                        
+private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+         try
+      {
+          int i=15;
+          String sql="update railway.trains Set FC='"+i+"' where Train_no='"+jTextField1.getText()+"'";
+      
+        Statement s=connect.createStatement();
+        
+       s.executeUpdate(sql);
+        
+                JOptionPane.showMessageDialog(null," updation Succssfully... ");
+       jTextField1.setText("");
+       
+      
+      jTextField1.requestFocusInWindow();
+      
+      }
+        
+      
+      catch(Exception ee)
+      {
+          
+      }
+    }                                        
+private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+         try
+      {
+          int i=15;
+          String sql="update railway.trains Set slp='"+i+"' where Train_no='"+jTextField1.getText()+"'";
+      
+        Statement s=connect.createStatement();
+        
+       s.executeUpdate(sql);
+        
+                JOptionPane.showMessageDialog(null," updation Succssfully... ");
+       jTextField1.setText("");
+      
+      
+      jTextField1.requestFocusInWindow();
+     
+      }
+        
+      
+      catch(Exception ee)
+      {
+          
+      }
+    }                                        
+public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new seat_u().setVisible(true);
+            }
+        });
+    }
+******************************Registration******************************
+package Railway;
+import com.mysql.jdbc.Connection;
+import java.awt.HeadlessException;
+import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+public class registration extends javax.swing.JFrame {
+Connection connect = null;
+ResultSet rst=null;
+PreparedStatement pst=null;
+
+    public registration() {
+        initComponents();
+        connect = (Connection) Railway.connDB();
+    }
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        try {
+
+    
+               Statement s=connect.createStatement();
+               String sql = "insert into railway.registration values('"+jTextField1.getText()+"','"+jPasswordField1.getText()+"','"+jTextField2.getText()+"','"+jTextField3.getText()+"','"+jTextField4.getText()+"','"+jTextField5.getText()+"')"; 
+               s.executeUpdate(sql);
+
+                JOptionPane.showMessageDialog(null, "Success !");
+                jTextField1.setText(" ");
+                jPasswordField1.setText(" ");
+                jTextField2.setText(" ");
+                jTextField3.setText(" ");
+                jTextField4.setText(" ");
+                jTextField5.setText(" ");
+              } 
+              catch (HeadlessException | SQLException e) {
+                      System.out.println("errorrr");
+              }                                             
+
+    }                                        
+public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(() -> {
+            new registration().setVisible(true);
+        });
+    }
+****************************Reservation******************************
+package Railway;
+public class reservation extends javax.swing.JFrame {
+    public reservation() {
+        initComponents();
+    }
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new SearchTrain().setVisible(true);
+    }                                        
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new login().setVisible(true);
+    }                                        
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new Ticket_c().setVisible(true);
+    }                                        
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        this.setVisible(false);
+        new booking().setVisible(true);
+    }                                        
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new reservation().setVisible(true);
+            }
+        });
+    }
+
+
+
+
+
+
+
+*******************Mysql**********************
+
+Database name:railway
+
+admin
+
+CREATE TABLE `admin` (
+  `user` varchar(20) NOT NULL DEFAULT '',
+  `Password` varchar(20) NOT NULL DEFAULT '',
+  PRIMARY KEY (`user`,`Password`)
+)
+
+booking
+
+CREATE TABLE `booking` (
+  `user` varchar(20) NOT NULL DEFAULT '',
+  `From_A` varchar(20) DEFAULT NULL,
+  `to_a` varchar(20) NOT NULL DEFAULT '',
+  `cate` varchar(10) DEFAULT NULL,
+  `Date` date DEFAULT NULL,
+  PRIMARY KEY (`user`,`to_a`),
+  CONSTRAINT `fk1` FOREIGN KEY (`user`) REFERENCES `registration` (`user`)
+)
+
+details
+
+CREATE TABLE `details` (
+  `Usn` varchar(10) NOT NULL DEFAULT '',
+  `Name` varchar(30) NOT NULL DEFAULT '',
+  `Description` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`Usn`,`Name`)
+)
+
+registration
+
+CREATE TABLE `registration` (
+  `user` varchar(20) NOT NULL DEFAULT '',
+  `Password` varchar(20) NOT NULL DEFAULT '',
+  `DOB` date DEFAULT NULL,
+  `mail` varchar(20) DEFAULT NULL,
+  `phno` varchar(20) DEFAULT NULL,
+  `Address` varchar(40) DEFAULT NULL,
+  `Age` int(2) DEFAULT NULL,
+  PRIMARY KEY (`user`,`Password`)
+)
+
+trains
+
+CREATE TABLE `trains` (
+  `Train_no` varchar(10) NOT NULL DEFAULT '',
+  `Train_Name` varchar(20) DEFAULT NULL,
+  `From_A` varchar(20) NOT NULL DEFAULT '',
+  `To_A` varchar(20) NOT NULL DEFAULT '',
+  `departs` varchar(10) DEFAULT NULL,
+  `Arrives` varchar(10) DEFAULT NULL,
+  `gen` int(10) DEFAULT NULL,
+  `AC1` varchar(10) DEFAULT NULL,
+  `AC2` varchar(10) DEFAULT NULL,
+  `FC` varchar(10) DEFAULT NULL,
+  `slp` varchar(10) DEFAULT NULL,
+  `Date` date DEFAULT NULL,
+  PRIMARY KEY (`Train_no`)
+)
+
+
+stored procedure:
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `abc`(IN user varchar(10),IN From_A varchar(20),IN to_a varchar(20),IN cate varchar(10),IN Date date)
+insert into booking(user,From_A,to_a,cate,Date) values(user,From_A,to_a,cate,Date)
+
+
+
+Trigger:-
+
+CREATE DEFINER=`root`@`localhost` TRIGGER agecheck
+     BEFORE INSERT ON registration FOR EACH ROW
+     BEGIN
+          IF NEW.age<1
+          THEN
+               CALL `'Please Enter a valid Age constraint'`;
+          END IF;
